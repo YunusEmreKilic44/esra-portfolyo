@@ -1,0 +1,85 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model PortreImage {
+  id       String @id @default(cuid())
+  imageUrl String
+  publicId String
+
+  @@map("portreImage")
+}
+
+model CollectionImage {
+  id           String     @id @default(cuid())
+  imageUrl     String
+  publicId     String
+  collectionId String
+  collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+
+  @@map("collectionImage")
+}
+
+model About {
+  id           String @id @default(cuid())
+  title        String
+  content      String
+  bio1         String
+  bio2         String
+  education    String
+  uzmanlik     String
+  applications String
+  languages    String
+
+  @@map("about")
+}
+
+model Collection {
+  id          String            @id @default(cuid())
+  title       String
+  category    String
+  year        String
+  material    String
+  description String
+  detail      String
+  images      CollectionImage[]
+
+  @@map("collection")
+}
+
+model LookbookImage {
+  id       String @id @default(cuid())
+  imageUrl String
+  publicId String
+
+  @@map("lookbookImage")
+}
+
+model Contact {
+  id       String @id @default(cuid())
+  title    String
+  email    String
+  linkedin String
+
+  @@map("contact")
+}
+
+model Admin {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("admin")
+}
